@@ -66,7 +66,7 @@ def sub_cb(topic, msg):
     try:
      display.fill(0)
      display.show()
-     display.text(msg, 0, 0, 1)
+     oled_text_scaled(display, msg, 0, 0, 2)
      display.show()
      #display.contrast(int(msg))
     except Exception as e:
