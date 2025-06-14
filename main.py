@@ -62,22 +62,16 @@ def sub_cb(topic, msg):
     led.value(1)
 
   if topic == b'esp32/oled':
-
-    try:
      display.fill(0)
      display.show()
      oled_text_scaled(display, msg, 0, 0, 2)
      display.show()
-     #display.contrast(int(msg))
-    except Exception as e:
+    
+  if topic == b'esp32/oled2':
      display.fill(0)
      display.show()
-     display.text('H A T A', 0, 0, 1)
-     display.show()
-     display.invert(1)
-     display.contrast(255)
-     display.show()
-     print("erroriis:  ",e)
+     oled_text_scaled(display, msg, 0, 16, 2)
+     display.show()  
 
 def connect_mqtt():
   global client_id, mqtt_server, topic_sub_led, topic_sub_oled
