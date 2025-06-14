@@ -28,6 +28,7 @@ topic_pub_hum = b'esp32/humidity'
 topic_pub_pres = b'esp32/pressure'
 topic_sub_led = b'esp32/output'
 topic_sub_oled = b'esp32/oled'
+topic_sub_oled2 = b'esp32/oled2'
 
 last_message = 0
 message_interval = 30
@@ -74,12 +75,13 @@ def sub_cb(topic, msg):
      display.show()  
 
 def connect_mqtt():
-  global client_id, mqtt_server, topic_sub_led, topic_sub_oled
+  global client_id, mqtt_server, topic_sub_led, topic_sub_oled, topic_sub_oled2
   client = MQTTClient(client_id, mqtt_server, user='mqtt_icin_kullanici', password='mqtt11',keepalive=60)
   client.connect()
   client.set_callback(sub_cb)
   client.subscribe(topic_sub_led)
   client.subscribe(topic_sub_oled)
+  client.subscribe(topic_sub_oled2)
 
   print('Connected to %s MQTT broker, subscribed to %s topic' % (mqtt_server, topic_sub_led))
   return client
