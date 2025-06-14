@@ -28,7 +28,7 @@ topic_sub_led = b'esp32/output'
 topic_sub_oled = b'esp32/oled'
 
 last_message = 0
-message_interval = 10
+message_interval = 20
 
 led = machine.Pin(2, machine.Pin.OUT)
 
