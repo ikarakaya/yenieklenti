@@ -9,13 +9,15 @@ import esp
 import random
 from machine import Pin, I2C
 import ssd1306
+from WIFI_CONFIG import SSID, PASSWORD
+
 
 esp.osdebug(None)
 import gc
 gc.collect()
 
-ssid = 'karleteko5'
-password = 'PyUdhE34d7Cy'
+# ssid = 'karleteko5'
+# password = 'PyUdhE34d7Cy'
 mqtt_server = '192.168.1.111'
 
 client_id = ubinascii.hexlify(machine.unique_id())
@@ -35,7 +37,7 @@ led = machine.Pin(2, machine.Pin.OUT)
 station = network.WLAN(network.STA_IF)
 
 station.active(True)
-station.connect(ssid, password)
+station.connect(SSID, PASSWORD)
 
 while station.isconnected() == False:
   pass
@@ -92,8 +94,33 @@ def restart_and_reconnect():
   print('Failed to connect to MQTT broker. Reconnecting...')
   time.sleep(10)
   machine.reset()
+
+def oled_text_scaled(oled, text, x, y, scale, character_width=8, character_height=8):
+    # temporary buffer for the text
+    width = character_width * len(text)
+    height = character_height
+    temp_buf = bytearray(width * height)
+    temp_fb = ssd1306.framebuf.FrameBuffer(temp_buf, width, height, ssd1306.framebuf.MONO_VLSB)
+
+    # write text to the temporary framebuffer
+    temp_fb.text(text, 0, 0, 1)
+
+    # scale and write to the display
+    for i in range(width):
+        for j in range(height):
+            pixel = temp_fb.pixel(i, j)
+            if pixel:  # If the pixel is set, draw a larger rectangle
+                oled.fill_rect(x + i * scale, y + j * scale, scale, scale, 1)
+
+
+
 try:
   client = connect_mqtt()
+  display.fill(0)
+  oled_text_scaled(display, "ABCDEFGH", 0, 0, 2)
+  oled_text_scaled(display, "abcdefgh", 0, 16, 2)
+  display.show()
+  time.sleep(3)
 except OSError as e:
   restart_and_reconnect()
 
@@ -114,5 +141,3 @@ while True:
       last_message = time.time()
   except OSError as e:
     restart_and_reconnect()
-
-

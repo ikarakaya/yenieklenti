@@ -2,6 +2,10 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"name": "Mpy Remote Workspace",
+			"uri": "pico:"
 		}
 	],
 	"settings": {
@@ -13,6 +17,7 @@
 			"c:\\Users\\ikara\\.vscode\\extensions\\wmerkens.vscode-circuitpython-v2-cursor-ai-0.3.3\\stubs",
 			"c:\\Users\\ikara\\AppData\\Roaming\\Code\\User\\globalStorage\\wmerkens.vscode-circuitpython-v2-cursor-ai\\bundle\\20250523\\adafruit-circuitpython-bundle-py-20250523\\lib",
 			"~/.micropico-stubs/micropython-esp32-stubs==1.25.0.post4"
-		]
+		],
+		"micropico.openOnStart": false
 	}
 }
