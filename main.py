@@ -9,6 +9,7 @@ import esp
 import random
 from machine import Pin, I2C
 import ssd1306
+import re
 from WIFI_CONFIG import SSID, PASSWORD
 
 
@@ -16,8 +17,6 @@ esp.osdebug(None)
 import gc
 gc.collect()
 
-# ssid = 'karleteko5'
-# password = 'PyUdhE34d7Cy'
 mqtt_server = '192.168.1.111'
 
 client_id = ubinascii.hexlify(machine.unique_id())
@@ -28,7 +27,7 @@ topic_pub_hum = b'esp32/humidity'
 topic_pub_pres = b'esp32/pressure'
 topic_sub_led = b'esp32/output'
 topic_sub_oled = b'esp32/oled'
-topic_sub_oled2 = b'esp32/oled2'
+
 
 last_message = 0
 message_interval = 30
@@ -65,23 +64,21 @@ def sub_cb(topic, msg):
   if topic == b'esp32/oled':
      display.fill(0)
      display.show()
-     oled_text_scaled(display, msg, 0, 0, 2)
+     ilk=re.findall('.{1,8}',msg)
+     oled_text_scaled(display, ilk[0], 0, 0, 2)
+     oled_text_scaled(display, ilk[1], 0, 16, 2)
      display.show()
-    
-  if topic == b'esp32/oled2':
-     display.fill(0)
-     display.show()
-     oled_text_scaled(display, msg, 0, 16, 2)
-     display.show()  
+   
+ 
 
 def connect_mqtt():
-  global client_id, mqtt_server, topic_sub_led, topic_sub_oled, topic_sub_oled2
+  global client_id, mqtt_server, topic_sub_led, topic_sub_oled
   client = MQTTClient(client_id, mqtt_server, user='mqtt_icin_kullanici', password='mqtt11',keepalive=60)
   client.connect()
   client.set_callback(sub_cb)
   client.subscribe(topic_sub_led)
   client.subscribe(topic_sub_oled)
-  client.subscribe(topic_sub_oled2)
+  
 
   print('Connected to %s MQTT broker, subscribed to %s topic' % (mqtt_server, topic_sub_led))
   return client
