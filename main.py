@@ -9,7 +9,6 @@ import esp
 import random
 from machine import Pin, I2C
 import ssd1306
-import re
 from WIFI_CONFIG import SSID, PASSWORD
 
 
@@ -63,8 +62,7 @@ def sub_cb(topic, msg):
 
   if topic == b'esp32/oled':
      display.fill(0)
-     display.show()
-     ilk=re.findall('.{1,8}',msg)
+     ilk = msg.split("|",2)
      oled_text_scaled(display, ilk[0], 0, 0, 2)
      oled_text_scaled(display, ilk[1], 0, 16, 2)
      display.show()
